@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cyberpunk Premium Dark Theme */
+    --background: 240 20% 4%;
+    --foreground: 210 40% 96%;
+    --card: 240 15% 9%;
+    --card-foreground: 210 40% 96%;
+    --popover: 240 15% 9%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 271 91% 65%;
+    --primary-foreground: 210 40% 96%;
+    --secondary: 188 85% 53%;
+    --secondary-foreground: 240 20% 4%;
+    --muted: 240 15% 18%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 188 85% 53%;
+    --accent-foreground: 240 20% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 96%;
+    --border: 240 15% 18%;
+    --input: 240 15% 18%;
+    --ring: 271 91% 65%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  /* Neon Glow Effects */
+  .neon-glow-primary {
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5),
+                0 0 20px rgba(168, 85, 247, 0.3),
+                0 0 30px rgba(168, 85, 247, 0.2);
+  }
+  
+  .neon-glow-secondary {
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.5),
+                0 0 20px rgba(34, 211, 238, 0.3),
+                0 0 30px rgba(34, 211, 238, 0.2);
+  }
+  
+  .neon-border-primary {
+    border-color: rgba(168, 85, 247, 0.5);
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.3),
+                inset 0 0 10px rgba(168, 85, 247, 0.1);
+  }
+  
+  .neon-border-secondary {
+    border-color: rgba(34, 211, 238, 0.5);
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.3),
+                inset 0 0 10px rgba(34, 211, 238, 0.1);
+  }
+  
+  /* Glassmorphism */
+  .glass {
+    background: rgba(19, 19, 26, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(31, 31, 41, 0.5);
+  }
+  
+  /* Smooth transitions */
+  .transition-fast {
+    transition: all 150ms ease-in-out;
+  }
+  
+  .transition-medium {
+    transition: all 200ms ease-in-out;
+  }
+}
+

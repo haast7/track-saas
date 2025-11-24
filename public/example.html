@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo de Uso - Track SaaS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #fff;
+    }
+    h1 {
+      color: #4a9eff;
+    }
+    .button {
+      background: #4a9eff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 5px;
+      font-size: 16px;
+    }
+    .button:hover {
+      background: #3a8eef;
+    }
+    .link {
+      color: #4a9eff;
+      text-decoration: none;
+      margin: 10px;
+      display: inline-block;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .info {
+      background: #2a2a2a;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .code {
+      background: #1a1a1a;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      border: 1px solid #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Exemplo de Tracking - Track SaaS</h1>
+  
+  <div class="info">
+    <h3>Status do Tracking</h3>
+    <p><strong>Session ID:</strong> <span id="session-id">Carregando...</span></p>
+    <p><strong>Status:</strong> <span id="status">Inicializando...</span></p>
+  </div>
+
+  <h2>Teste de Cliques</h2>
+  <p>Clique nos botões abaixo para testar o tracking de cliques:</p>
+  
+  <button class="button" id="btn-1">Botão 1</button>
+  <button class="button" id="btn-2">Botão 2</button>
+  <button class="button" data-track="custom">Botão com data-track</button>
+  
+  <h2>Teste de Links</h2>
+  <p>Clique nos links abaixo:</p>
+  
+  <a href="#link1" class="link">Link 1</a>
+  <a href="#link2" class="link">Link 2</a>
+  <a href="https://example.com" class="link" target="_blank">Link Externo</a>
+
+  <h2>Tracking Manual</h2>
+  <button class="button" id="manual-pageview">Rastrear Pageview Manualmente</button>
+  <button class="button" id="manual-click">Rastrear Clique Manualmente</button>
+
+  <div class="info">
+    <h3>Console</h3>
+    <p>Abra o console do navegador (F12) para ver os logs de tracking.</p>
+  </div>
+
+  <!-- Configuração do TrackSaaS -->
+  <script>
+    // IMPORTANTE: Configure com seus dados reais
+    window.TrackSaaSConfig = {
+      supabaseUrl: 'https://SEU-PROJETO.supabase.co',
+      funnelId: 'SEU-FUNNEL-ID-AQUI',
+      // anonKey: 'sua-chave-anon-opcional',
+      trackButtons: true,
+      trackSelector: 'button, a[href], [data-track]',
+      autoTrack: true
+    };
+  </script>
+
+  <!-- Script de Tracking -->
+  <script src="/tracking.js"></script>
+
+  <!-- Script de exemplo -->
+  <script>
+    // Aguarda inicialização
+    function waitForTrackSaaS(callback) {
+      if (window.TrackSaaS && window.TrackSaaS.initialized) {
+        callback();
+      } else {
+        setTimeout(() => waitForTrackSaaS(callback), 100);
+      }
+    }
+
+    waitForTrackSaaS(() => {
+      // Atualiza informações na página
+      const sessionIdEl = document.getElementById('session-id');
+      const statusEl = document.getElementById('status');
+      
+      if (window.TrackSaaS.sessionId) {
+        sessionIdEl.textContent = window.TrackSaaS.sessionId;
+        statusEl.textContent = '✅ Ativo';
+        statusEl.style.color = '#4ade80';
+      } else {
+        statusEl.textContent = '❌ Erro na inicialização';
+        statusEl.style.color = '#ef4444';
+      }
+
+      // Tracking manual de pageview
+      document.getElementById('manual-pageview').addEventListener('click', () => {
+        window.TrackSaaS.track('pageview');
+        console.log('Pageview rastreado manualmente');
+        alert('Pageview rastreado! Verifique o console.');
+      });
+
+      // Tracking manual de clique
+      document.getElementById('manual-click').addEventListener('click', function() {
+        window.TrackSaaS.track('click', { element: this });
+        console.log('Clique rastreado manualmente', this);
+        alert('Clique rastreado! Verifique o console.');
+      });
+
+      // Log de eventos
+      const originalTrack = window.TrackSaaS.track.bind(window.TrackSaaS);
+      window.TrackSaaS.track = function(type, data) {
+        console.log('📊 TrackSaaS Event:', type, data);
+        return originalTrack(type, data);
+      };
+    });
+
+    // Log de cliques automáticos
+    document.addEventListener('click', (e) => {
+      if (e.target.matches('button, a[href], [data-track]')) {
+        console.log('🖱️ Clique detectado:', e.target);
+      }
+    });
+  </script>
+
+  <div class="info">
+    <h3>📝 Como usar em sua página</h3>
+    <div class="code">
+&lt;script&gt;
+  window.TrackSaaSConfig = {
+    supabaseUrl: 'https://seu-projeto.supabase.co',
+    funnelId: 'uuid-do-funnel',
+    anonKey: 'sua-chave-anon' // Opcional
+  };
+&lt;/script&gt;
+&lt;script src="https://seu-dominio.com/tracking.js"&gt;&lt;/script&gt;
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+

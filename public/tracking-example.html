@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exemplo de Uso - Track SaaS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #0B0B0E;
+      color: #F1F5F9;
+    }
+    .button {
+      background: #A855F7;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 10px 5px;
+      font-size: 16px;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    }
+    .button:hover {
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.8);
+    }
+    .info {
+      background: #13131A;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+      border: 1px solid #1F1F29;
+    }
+    .code {
+      background: #0B0B0E;
+      padding: 10px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 12px;
+      overflow-x: auto;
+      border: 1px solid #1F1F29;
+      color: #22D3EE;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 Exemplo de Tracking - Track SaaS</h1>
+  
+  <div class="info">
+    <h3>Status do Tracking</h3>
+    <p><strong>Session ID:</strong> <span id="session-id">Carregando...</span></p>
+    <p><strong>Funnel ID:</strong> <span id="funnel-id">-</span></p>
+  </div>
+
+  <h2>Teste de Cliques</h2>
+  <p>Clique nos botões abaixo para testar o tracking de cliques:</p>
+  
+  <button class="button" data-track-btn="btn-cta-1">Botão CTA 1</button>
+  <button class="button" data-track-btn="btn-cta-2">Botão CTA 2</button>
+  <a href="https://t.me/seu_canal" class="button" data-track-btn="telegram-link">Abrir Telegram</a>
+
+  <div class="info">
+    <h3>📝 Como usar</h3>
+    <div class="code">
+&lt;script&gt;
+  window.TRACK_FUNNEL_ID = 'uuid-do-funnel';
+  window.TRACK_SUPABASE_URL = 'https://seu-projeto.supabase.co'; // Opcional
+&lt;/script&gt;
+&lt;script src="https://seu-dominio.com/tracking.js"&gt;&lt;/script&gt;
+
+&lt;!-- Botão com tracking --&gt;
+&lt;button data-track-btn="meu-botao-id"&gt;Clique Aqui&lt;/button&gt;
+
+&lt;!-- Link do Telegram (sessionId será adicionado automaticamente) --&gt;
+&lt;a href="https://t.me/seu_canal" data-track-btn="telegram"&gt;Abrir Canal&lt;/a&gt;
+    </div>
+  </div>
+
+  <!-- Configuração do TrackSaaS -->
+  <script>
+    // IMPORTANTE: Configure com seus dados reais
+    window.TRACK_FUNNEL_ID = 'SEU-FUNNEL-ID-AQUI';
+    window.TRACK_SUPABASE_URL = 'https://SEU-PROJETO.supabase.co';
+  </script>
+
+  <!-- Script de Tracking -->
+  <script src="/tracking.js"></script>
+
+  <!-- Script de exemplo -->
+  <script>
+    // Aguarda inicialização
+    setTimeout(() => {
+      if (window.TrackSaaS) {
+        const sessionId = window.TrackSaaS.getSession();
+        document.getElementById('session-id').textContent = sessionId;
+        document.getElementById('funnel-id').textContent = window.TRACK_FUNNEL_ID || 'Não configurado';
+      }
+    }, 500);
+  </script>
+</body>
+</html>
+
+
+
+
