@@ -4,13 +4,8 @@
 -- Habilita UUID (se ainda não estiver habilitado)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
--- Adicionar colunas faltantes na tabela users (se necessário)
-DO $$ 
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'name') THEN
-    ALTER TABLE users ADD COLUMN name text;
-  END IF;
-END $$;
+-- NOTA: Removido tentativa de adicionar colunas em tabela 'users' pois não existe
+-- O sistema usa auth.users do Supabase Auth
 
 -- Adicionar colunas faltantes na tabela domains
 DO $$ 
@@ -334,9 +329,10 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Trigger para criar registros default quando usuário é criado
-DROP TRIGGER IF EXISTS on_user_created ON users;
-CREATE TRIGGER on_user_created
-    AFTER INSERT ON users
+-- CORRIGIDO: Usar auth.users ao invés de users (que não existe)
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
     FOR EACH ROW
     EXECUTE FUNCTION handle_new_user();
 

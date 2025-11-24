@@ -161,13 +161,13 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Executar postbacks (em background)
+    // Executar postbacks (em background) - CORRIGIDO: passar userId para segurança
     executePostbacks('ViewPage', {
       funnel_id,
       session_id: finalSessionId,
       url,
       pageview_id: pageview.id,
-    }).catch((postbackError) => {
+    }, funnel.user_id).catch((postbackError) => {
       console.error('Error executing postbacks:', postbackError)
     })
 

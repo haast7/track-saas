@@ -119,23 +119,12 @@ export async function GET(request: NextRequest) {
           continue
         }
 
-        // 3. Resetar usage para zero quando expirar
-        const { error: usageError } = await supabase
-          .from('usage')
-          .update({
-            funnels_count: 0,
-            pixels_count: 0,
-            pageviews_count: 0,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('user_id', subscription.user_id)
+        // CORREÇÃO: NÃO resetar usage quando subscription expira
+        // Usage só deve ser resetado quando a subscription é RENOVADA (no webhook do Stripe)
+        // Quando expira, o usuário não pode criar mais recursos, mas mantém o count atual
+        // para que quando renovar, o count seja zerado e ele possa criar novos recursos
 
-        if (usageError) {
-          console.error(`Error resetting usage for user ${subscription.user_id}:`, usageError)
-          // Não falha a atualização da subscription se o reset de usage falhar
-        }
-
-        // 4. Buscar nome do plano
+        // 3. Buscar nome do plano
         let planName = 'desconhecido'
         try {
           const { data: plan } = await supabase
