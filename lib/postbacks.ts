@@ -27,23 +27,33 @@ export interface PostbackEventData {
 
 /**
  * Executa postbacks ativos para um evento específico
- * 
+ *
  * @param eventType - Tipo do evento ('ViewPage', 'Clique', 'Entrada no Canal', 'Saída do Canal')
  * @param eventData - Dados do evento para enviar no postback
+ * @param userId - ID do usuário dono do funil (OBRIGATÓRIO para segurança multi-tenant)
  */
 export async function executePostbacks(
   eventType: 'ViewPage' | 'Clique' | 'Entrada no Canal' | 'Saída do Canal',
-  eventData: PostbackEventData
+  eventData: PostbackEventData,
+  userId?: string
 ): Promise<void> {
   try {
     const supabase = createSupabaseAdminClient()
 
-    // Buscar todos os postbacks ativos para este evento
-    const { data: postbacks, error } = await supabase
+    // CORREÇÃO: Filtrar postbacks por user_id para garantir isolamento multi-tenant
+    // Sem este filtro, um usuário poderia executar postbacks de outro usuário
+    let query = supabase
       .from('postbacks')
       .select('*')
       .eq('event', eventType)
       .eq('is_active', true)
+
+    // Filtrar por user_id se fornecido (segurança)
+    if (userId) {
+      query = query.eq('user_id', userId)
+    }
+
+    const { data: postbacks, error } = await query
 
     if (error) {
       console.error('Error fetching postbacks:', error)

@@ -298,23 +298,17 @@ export async function canTrackPageview(
 }
 
 /**
- * Incrementa o contador de funis no usage
+ * Incrementa o contador de funis no usage (ATOMIC)
+ * CORREÇÃO: Usa RPC function para evitar race conditions
  */
 export async function incrementFunnelsCount(userId: string): Promise<void> {
   const supabase = await createServerSupabaseClient()
-  
-  // Buscar uso atual
-  const usage = await getUsage(userId)
-  
-  // Incrementar contador
-  const { error } = await supabase
-    .from('usage')
-    .update({ 
-      funnels_count: usage.funnels_count + 1,
-      updated_at: new Date().toISOString()
-    })
-    .eq('user_id', userId)
-  
+
+  // Usar RPC function para incremento atômico (evita race conditions)
+  const { error } = await supabase.rpc('increment_usage_funnels', {
+    p_user_id: userId
+  })
+
   if (error) {
     console.error('Error incrementing funnels count:', error)
     throw error
@@ -322,23 +316,17 @@ export async function incrementFunnelsCount(userId: string): Promise<void> {
 }
 
 /**
- * Incrementa o contador de pixels no usage
+ * Incrementa o contador de pixels no usage (ATOMIC)
+ * CORREÇÃO: Usa RPC function para evitar race conditions
  */
 export async function incrementPixelsCount(userId: string): Promise<void> {
   const supabase = await createServerSupabaseClient()
-  
-  // Buscar uso atual
-  const usage = await getUsage(userId)
-  
-  // Incrementar contador
-  const { error } = await supabase
-    .from('usage')
-    .update({ 
-      pixels_count: usage.pixels_count + 1,
-      updated_at: new Date().toISOString()
-    })
-    .eq('user_id', userId)
-  
+
+  // Usar RPC function para incremento atômico (evita race conditions)
+  const { error } = await supabase.rpc('increment_usage_pixels', {
+    p_user_id: userId
+  })
+
   if (error) {
     console.error('Error incrementing pixels count:', error)
     throw error
@@ -346,23 +334,17 @@ export async function incrementPixelsCount(userId: string): Promise<void> {
 }
 
 /**
- * Incrementa o contador de pageviews no usage
+ * Incrementa o contador de pageviews no usage (ATOMIC)
+ * CORREÇÃO: Usa RPC function para evitar race conditions
  */
 export async function incrementPageviewsCount(userId: string): Promise<void> {
   const supabase = await createServerSupabaseClient()
-  
-  // Buscar uso atual
-  const usage = await getUsage(userId)
-  
-  // Incrementar contador
-  const { error } = await supabase
-    .from('usage')
-    .update({ 
-      pageviews_count: usage.pageviews_count + 1,
-      updated_at: new Date().toISOString()
-    })
-    .eq('user_id', userId)
-  
+
+  // Usar RPC function para incremento atômico (evita race conditions)
+  const { error } = await supabase.rpc('increment_usage_pageviews', {
+    p_user_id: userId
+  })
+
   if (error) {
     console.error('Error incrementing pageviews count:', error)
     throw error
@@ -408,23 +390,17 @@ export async function canCreateDomain(
 }
 
 /**
- * Incrementa o contador de domínios no usage
+ * Incrementa o contador de domínios no usage (ATOMIC)
+ * CORREÇÃO: Usa RPC function para evitar race conditions
  */
 export async function incrementDomainsCount(userId: string): Promise<void> {
   const supabase = await createServerSupabaseClient()
-  
-  // Buscar uso atual
-  const usage = await getUsage(userId)
-  
-  // Incrementar contador
-  const { error } = await supabase
-    .from('usage')
-    .update({ 
-      domains_count: usage.domains_count + 1,
-      updated_at: new Date().toISOString()
-    })
-    .eq('user_id', userId)
-  
+
+  // Usar RPC function para incremento atômico (evita race conditions)
+  const { error } = await supabase.rpc('increment_usage_domains', {
+    p_user_id: userId
+  })
+
   if (error) {
     console.error('Error incrementing domains count:', error)
     throw error

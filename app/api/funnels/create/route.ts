@@ -30,6 +30,42 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // CORREÇÃO: Validar se domain_id pertence ao usuário (segurança multi-tenant)
+    const { data: domain, error: domainError } = await supabase
+      .from('domains')
+      .select('id')
+      .eq('id', domain_id)
+      .eq('user_id', user.id)
+      .single()
+
+    if (domainError || !domain) {
+      return NextResponse.json(
+        {
+          error: 'invalid_domain',
+          message: 'Domínio não encontrado ou não pertence a você',
+        },
+        { status: 403 }
+      )
+    }
+
+    // CORREÇÃO: Validar se pixel_id pertence ao usuário (segurança multi-tenant)
+    const { data: pixel, error: pixelError } = await supabase
+      .from('pixels')
+      .select('id')
+      .eq('id', pixel_id)
+      .eq('user_id', user.id)
+      .single()
+
+    if (pixelError || !pixel) {
+      return NextResponse.json(
+        {
+          error: 'invalid_pixel',
+          message: 'Pixel não encontrado ou não pertence a você',
+        },
+        { status: 403 }
+      )
+    }
+
     // Validar plano e limites antes de criar
     const billingCheck = await canCreateFunnel(user.id)
 
