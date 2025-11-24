@@ -186,11 +186,15 @@ Deno.serve(async (req) => {
 
       const tgUserId = member.id;
 
-      // Buscar click mais recente com session_id
+      // CORREÇÃO: Buscar click mais recente com filtro de tempo (últimas 24h)
+      // Isso evita pegar clicks antigos de outros usuários
+      const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+
       const { data: click } = await supabase
         .from("clicks")
         .select("*")
         .not("session_id", "is", null)
+        .gte("created_at", twentyFourHoursAgo) // Apenas clicks das últimas 24h
         .order("created_at", { ascending: false })
         .limit(1)
         .single();
